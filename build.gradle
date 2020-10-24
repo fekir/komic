@@ -1,0 +1,38 @@
+buildscript {
+	ext.kotlin_version = '1.3.50'
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	}
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+mainClassName = 'komic.MainKt'
+
+defaultTasks 'test'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	compile "org.jsoup:jsoup:1.13.1"
+	ext.sevenzip_version = '16.02-2.01'
+	compile group: 'net.sf.sevenzipjbinding', name: 'sevenzipjbinding-all-platforms', version: "$sevenzip_version"
+	compile group: 'net.sf.sevenzipjbinding', name: 'sevenzipjbinding', version: "$sevenzip_version"
+	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'komic.MainKt'
+	}
+	// create fat jar
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
