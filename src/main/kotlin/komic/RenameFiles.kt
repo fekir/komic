@@ -3,27 +3,11 @@ package komic
 import komic.fs.FileNameLengthComparator
 import komic.fs.WindowsExplorerFileComparator
 import java.io.File
-import java.net.URLDecoder
 import java.util.*
 
-
-fun make_file_ext_lowercase(file_name: String): String {
-	val i = file_name.lastIndexOf('.')
-	if (i > 0) {
-		val extension = file_name.substring(i + 1).toLowerCase()
-		return file_name.replaceRange(i + 1, file_name.length, extension)
-	}
-	return file_name
-}
-
-fun clean_file_ext(file_name_: String): String {
-	return make_file_ext_lowercase(file_name_)
-			.replace(Regex("\\.jpeg$"), ".jpg")
-}
-
-fun is_image_file_name(file_name_: String, clean : Boolean = true): Boolean {
-	val file_name = if(clean) clean_file_ext(file_name_) else file_name_
-	return file_name.endsWith(".jpg") || file_name.endsWith(".png") || file_name.endsWith(".gif") || file_name.endsWith(".tif")
+fun is_image_file_name(file: File): Boolean {
+	val ext = file.extension.toLowerCase(Locale.ROOT)
+	return ext.endsWith("jpg") || ext.endsWith("jpeg") || ext.endsWith("png") || ext.endsWith("gif") || ext.endsWith("tiff")
 }
 
 
@@ -33,8 +17,9 @@ enum class recursive {
 
 fun enumerate_prefix_images(folder: File, prefix: String) {
 	val fileList = folder.listFiles { file ->
-		file.isDirectory || is_image_file_name(file.name) }.orEmpty().toList()
+		file.isDirectory || is_image_file_name(file) }.orEmpty().toList()
 
+	// avoid overwriting files
 	Collections.sort(fileList, FileNameLengthComparator)
 	for (file in fileList) {
 		if (file.isDirectory) {
@@ -45,10 +30,11 @@ fun enumerate_prefix_images(folder: File, prefix: String) {
 }
 
 fun enumerate_images(folder: File, begin: Int = 1, rec_enum: recursive = recursive.yes): Int {
+	// add prefix to avoid overwriting files
 	enumerate_prefix_images(folder, "ren")
 
 	val fileList = folder.listFiles { file ->
-		file.isDirectory || is_image_file_name(file.name) }.orEmpty().toList()
+		file.isDirectory || is_image_file_name(file) }.orEmpty().toList()
 
 	Collections.sort(fileList, WindowsExplorerFileComparator)
 

@@ -85,19 +85,6 @@ internal class TestRename {
 	}
 
 	@Test
-	fun test_clean_file_ext() {
-		val expected = "myext.jpg"
-		val res1 = clean_file_ext("myext.jpg")
-		assertEquals(expected, res1)
-		val res2 = clean_file_ext("myext.JPG")
-		assertEquals(expected, res2)
-		val res3 = clean_file_ext("myext.JPEG")
-		assertEquals(expected, res3)
-		val res4 = clean_file_ext("myext.jpeg")
-		assertEquals(expected, res4)
-	}
-
-	@Test
 	fun test_enumerate() {
 		val filenames = listOf("001", "002a", "002b", "003", "004").map { "$it.jpg" }
 		val tmpdir = create_tmp_dir(listOf(), filenames)

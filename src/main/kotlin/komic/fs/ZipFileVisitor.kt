@@ -187,7 +187,7 @@ fun validate_cbz(cbz: File): List<String> {
 			} else {
 				// could validate that text files are utf8-encoded, and images are optimal or something like that
 				//zipFile.getInputStream(entry).copyTo(FileOutputStream(newFile), zipFile.size())
-				if (is_image_file_name(entry.name)) {
+				if (is_image_file_name(File(entry.name))) {
 					val p = Pattern.compile(pattern)
 					val m = p.matcher(entry.name)
 					val found = m.find()
