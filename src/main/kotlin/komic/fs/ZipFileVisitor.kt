@@ -199,7 +199,7 @@ fun validate_cbz(cbz: File): List<String> {
 		}
 	}
 	ints.sort()
-	if (ints.asSequence().distinct().count() != ints.count()) {
+	if (ints.asSequence().distinct().count() != ints.size) {
 		toreturn.add("File names are not unique")
 		return toreturn
 	}

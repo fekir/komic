@@ -103,7 +103,7 @@ internal class TestZip {
 					"[I PK 111-1]   Paperinik e il Natale eroico\n"
 
 			PrintWriter(FileWriter(File(zipdir, "inducks.txt"), true), true).use { out ->
-				out.println(inducks_content)
+				out.print(inducks_content)
 			}
 
 			val zipfile = File(tmpdir, "test.zip")
@@ -112,8 +112,8 @@ internal class TestZip {
 			}
 
 			val read_content = inducks_cat(zipfile)
-			val inducks_content_as_list = inducks_content.split("\n")
-			for (i in 0 until read_content.size) {
+			val inducks_content_as_list = inducks_content.lines()
+			for (i in read_content.indices) {
 				assertEquals(read_content[i], inducks_content_as_list[i])
 			}
 		}

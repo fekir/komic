@@ -107,10 +107,10 @@ internal class TestRename {
 			val index = enumerate_images(it.file)
 			assertEquals(filenames.size, index - 1)
 
-			val fileList = it.file.listFiles()
+			val fileList = it.file.listFiles().orEmpty()
 			fileList.sort()
 
-			for (i in 0 until fileList.size) {
+			for (i in fileList.indices) {
 				assertEquals(String.format("%03d.jpg", i + 1), fileList[i].name)
 			}
 		}
@@ -123,14 +123,15 @@ internal class TestRename {
 			val prefix = "pre"
 			val fileNames = arrayListOf(prefix, prefix + prefix)
 			fileNames.sort()
-			for (i in 0 until fileNames.size) {
+			for (i in fileNames.indices) {
 				File(it.file, fileNames[i] + ".jpg").createNewFile()
 			}
 
 			enumerate_prefix_images(it.file, prefix)
-			val fileList = it.file.listFiles()
+			val fileList = it.file.listFiles().orEmpty()
+			assertEquals(fileNames.size, fileList.size)
 			fileList.sort()
-			for (i in 0 until fileList.size) {
+			for (i in fileList.indices) {
 				assertEquals(prefix + fileNames[i] + ".jpg", fileList[i].name)
 			}
 		}
