@@ -5,7 +5,6 @@ import komic.fs.WindowsExplorerFileComparator
 import komic.fs.create_tmp_dir
 import org.junit.Test
 import java.io.File
-import java.nio.file.Files
 import java.util.*
 import kotlin.test.assertEquals
 

@@ -1,7 +1,6 @@
 package komic
 
 import komic.fs.*
-import org.junit.Ignore
 import org.junit.Test
 import java.io.*
 import java.nio.file.FileVisitResult
@@ -9,7 +8,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
-import java.util.zip.ZipOutputStream
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
