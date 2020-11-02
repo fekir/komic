@@ -119,4 +119,33 @@ internal class TestZip {
 		}
 	}
 
+	@Test
+	fun `mimetype comes first and is not compressed`() {
+		val tmpdir = Files.createTempDirectory("first_mimetype").toFile()
+		AutoDeleteFile(tmpdir).use {
+			val zipdir = File(tmpdir, "epub")
+			zipdir.mkdir()
+			val content = "application/epub+zip"
+			PrintWriter(FileWriter(File(zipdir, "mimetype"), true), true).use { out ->
+				out.println(content)
+			}
+			val zipfile = File(tmpdir, "test.zip")
+			zip_epub(zipdir, zipfile)
+			val buff = ByteArray(100)
+			zipfile.inputStream().use { input ->
+				val sz = input.read(buff)
+				assertEquals('P'.toByte(), buff[0])
+				assertEquals('K'.toByte(), buff[1])
+				assertEquals(0x03, buff[2])
+				assertEquals(0x04, buff[3])
+				val from_list = buff.toString(Charsets.US_ASCII)
+				if(!from_list.toList().containsAll(content.toList())){
+					fail("content not found: $from_list")
+				}
+
+			}
+
+		}
+	}
+
 }

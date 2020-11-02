@@ -14,12 +14,13 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
-internal class Test7z {
+internal class Test7zip {
 
 	@Test
 	fun `extract 7z`() {
 		val tmpdir = create_tmp_dir()
 		AutoDeleteFile(tmpdir).use { _ ->
+			val tmpdir = File(tmpdir, "temp")
 			un7zip("data/test.7z", tmpdir)
 
 			val files = tmpdir.walk().filter { it.isFile }.toList()
@@ -32,6 +33,7 @@ internal class Test7z {
 	fun `extract 7z with dirty dir`() {
 		val tmpdir = create_tmp_dir()
 		AutoDeleteFile(tmpdir).use { _ ->
+			val tmpdir = File(tmpdir, "temp")
 			un7zip("data/test-with-dirty-dir.7z", tmpdir)
 
 			val files = tmpdir.walk().filter { it.isFile }.toList()
@@ -44,6 +46,7 @@ internal class Test7z {
 	fun `extract rar`() {
 		val tmpdir = create_tmp_dir()
 		AutoDeleteFile(tmpdir).use { _ ->
+			val tmpdir = File(tmpdir, "temp")
 			un7zip("data/test.rar", tmpdir)
 
 			val files = tmpdir.walk().filter { it.isFile }.toList()

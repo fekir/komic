@@ -10,29 +10,35 @@ import java.io.FileOutputStream
 import java.io.RandomAccessFile
 
 
+fun flat_dir(directory : File){
+	val subdirs = directory.list()
+	if (subdirs?.size != 1) {
+		return
+	}
+	val subdir = File(directory, subdirs[0])
+	val files = subdir.list()
+	files?.forEach {file ->
+		// FIXME: possible name clash between file and subdir
+		File(subdir, file).renameTo(File(directory, file))
+	}
+	subdir.delete()
+}
+
 fun un7zip(cbz: File) {
 	val directory = File(cbz.parent, cbz.nameWithoutExtension)
 	if (directory.exists()) { // FIXME: check empty and check if we need to use internal directory
 		throw ComicException("directory " + directory.absolutePath + " already exists")
 	}
-	directory.mkdir();
 
 	un7zip(cbz.path, directory)
-
-	// FIXME: split to separate method
-	if (directory.list().size == 1) {
-		val subdirs = directory.list()
-		val subdir = File(directory, subdirs[0])
-		val files = subdir.list()
-		for (file in files) {
-			// FIXME: possible name clash between file and subdir
-			File(subdir, file).renameTo(File(directory, file))
-		}
-		subdir.delete()
-	}
+	flat_dir(directory)
 }
 
 fun un7zip(file: String, extractPath: File) {
+	if(extractPath.exists()){
+		throw ComicException("path already exists")
+	}
+	extractPath.mkdir()
 	RandomAccessFile(File(file), "r").use { randomAccessFile ->
 		SevenZip.openInArchive(null, RandomAccessFileInStream(randomAccessFile)).use { inArchive ->
 			inArchive.extract(null, false, MyExtractCallback(inArchive, extractPath))

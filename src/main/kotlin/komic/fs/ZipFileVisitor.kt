@@ -91,6 +91,22 @@ fun zip_cbz(dir: File, outfile: File) {
 	}
 }
 
+fun zip_epub(dir: File, outfile: File) {
+	ZipOutputStream(FileOutputStream(outfile)).use { zout ->
+		val mimetype = File(dir, "mimetype")
+		if(!mimetype.exists()) {
+			throw ComicException("missing mimetype, invalid epub")
+		}
+		zout.setLevel(NO_COMPRESSION)
+		val ze = ZipEntry(mimetype.relativeTo(dir).toString())
+		zout.putNextEntry(ze)
+		FileInputStream(mimetype).copyTo(zout)
+		zout.setLevel(BEST_COMPRESSION)
+		zout.closeEntry()
+		Files.walkFileTree(dir.toPath(), ZipFileVisitor(zout, dir.toPath() , listOf(mimetype)))
+	}
+}
+
 fun update(cbz: File) {
 // https://stackoverflow.com/questions/11502260/modifying-a-text-file-in-a-zip-archive-in-java#21457205
 }
