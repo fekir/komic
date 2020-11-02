@@ -24,14 +24,14 @@ fun isDirtyDirectory(file: File): Boolean {
 }
 
 fun isHidden(file: File): Boolean {
-	return file.name.startsWith('.') && file.name != ".";
+	return file.name.startsWith('.') && file.name != "."
 }
 
 
 fun clean(folder: Path): List<File> {
-	val remover = CleanFileVisitor({ isDirtyFile(it) }, { isDirtyDirectory(it) }, { isHidden(it) }, { isHidden(it) });
+	val remover = CleanFileVisitor({ isDirtyFile(it) }, { isDirtyDirectory(it) }, { isHidden(it) }, { isHidden(it) })
 	Files.walkFileTree(folder, remover)
-	return remover.hiddenfiles + remover.hiddendirs;
+	return remover.hiddenfiles + remover.hiddendirs
 }
 
 fun clean(folder: File): List<File> {

@@ -1,4 +1,4 @@
-package komic.fs;
+package komic.fs
 
 
 import komic.ComicException
@@ -36,7 +36,7 @@ fun un7zip(cbz: File) {
 fun un7zip(file: String, extractPath: File) {
 	RandomAccessFile(File(file), "r").use { randomAccessFile ->
 		SevenZip.openInArchive(null, RandomAccessFileInStream(randomAccessFile)).use { inArchive ->
-			inArchive.extract(null, false, MyExtractCallback(inArchive, extractPath));
+			inArchive.extract(null, false, MyExtractCallback(inArchive, extractPath))
 		}
 	}
 }
@@ -57,12 +57,12 @@ fun zipContainsFile(crx: File, filename: String): Boolean {
 
 class MySequentialOutStream(private val fos: FileOutputStream) : ISequentialOutStream, AutoCloseable {
 	override fun write(data: ByteArray): Int {
-		fos.write(data);
-		return data.size;
+		fos.write(data)
+		return data.size
 	}
 
 	override fun close() {
-		fos.close();
+		fos.close()
 	}
 }
 
@@ -70,21 +70,21 @@ class MyExtractCallback(private val inArchive: IInArchive, private val extractPa
 
 	override fun getStream(index: Int, extractAskMode: ExtractAskMode): ISequentialOutStream? {
 
-		val filePath = inArchive.getStringProperty(index, PropID.PATH);
-		val isfolder = inArchive.getStringProperty(index, PropID.IS_FOLDER);
+		val filePath = inArchive.getStringProperty(index, PropID.PATH)
+		val isfolder = inArchive.getStringProperty(index, PropID.IS_FOLDER)
 
-		val path = File(extractPath.path, filePath);
+		val path = File(extractPath.path, filePath)
 
 		if(dirtyDirectories.any { path.absolutePath.contains("/$it", ignoreCase = true) }){ // avoid extracting, as result we might have only one directory
 			// FIXME: add warning or flag for overriding behaviour
-			return null;
+			return null
 		}
 
 		if (isfolder == "+") {
 			if (!path.exists() && !path.mkdirs()) {
-				throw RuntimeException("unable to create dirs");
+				throw RuntimeException("unable to create dirs")
 			}
-			return null;
+			return null
 		}
 
 		path.parentFile.mkdirs()

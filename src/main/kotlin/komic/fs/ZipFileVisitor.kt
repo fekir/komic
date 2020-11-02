@@ -99,27 +99,27 @@ fun update(cbz: File) {
 /// true if equal (modulo .cbz)
 /// or if directory (ends with /) is equal to filename
 fun comparename(zip: ZipEntry, cbz: File): Boolean {
-	val file1 = zip.name;
-	val file2 = cbz.name;
+	val file1 = zip.name
+	val file2 = cbz.name
 	if (file1 == file2) {
-		return true;
+		return true
 	}
 	if ("$file1.cbz" == file2 || "$file2.cbz" == file1) {
-		return true;
+		return true
 	}
 
 	if (file1.endsWith('/') && file1.substring(0, file1.length - 1) == file2) {
-		return true;
+		return true
 	}
 	if (file2.endsWith('/') && file2.substring(0, file2.length - 1) == file1) {
-		return true;
+		return true
 	}
-	return false;
+	return false
 }
 
 
 fun validate_name(name:String) : Boolean {
-	return !name.contains('\n');
+	return !name.contains('\n')
 }
 
 /// Validations for epub:
@@ -202,16 +202,16 @@ fun validate_cbz(cbz: File): List<String> {
 	ints.sort()
 	if (ints.asSequence().distinct().count() != ints.count()) {
 		toreturn.add("File names are not unique")
-		return toreturn;
+		return toreturn
 	}
 
 	// makes sense only if filenames unique
-	var checkval = 0;
+	var checkval = 0
 	for (i in ints) {
-		++checkval;
+		++checkval
 		if (i != checkval) {
 			toreturn.add("First missing image nr $checkval")
-			break; // other checks do not make sense anymore
+			break // other checks do not make sense anymore
 		}
 	}
 	return toreturn

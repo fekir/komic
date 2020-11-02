@@ -19,6 +19,6 @@ class AutoDeleteFile(val file: File) : Closeable {
 	 * Do not delete the file/path on close
 	 */
 	fun detach() {
-		detached = true;
+		detached = true
 	}
 }
