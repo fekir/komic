@@ -16,16 +16,15 @@ import kotlin.test.*
 // FIXME: move to helpers for testing
 
 fun create_tmp_dir(listdirs: List<String> = emptyList(), listfiles: List<String> = emptyList()): File {
-	val tmpdir = Files.createTempDirectory("to_clean_")
-	val toreturn = tmpdir.toFile()
+	val tmpdir = createTempDir()
 	try {
 		assertTrue(listdirs.all { !it.startsWith('/') })
 		assertTrue(listfiles.all { !it.startsWith('/') })
-		assertTrue(listdirs.all { File(toreturn, it).mkdirs() })
-		assertTrue(listfiles.all { File(toreturn, it).createNewFile() })
-		return toreturn
+		assertTrue(listdirs.all { File(tmpdir, it).mkdirs() })
+		assertTrue(listfiles.all { File(tmpdir, it).createNewFile() })
+		return tmpdir
 	} catch (t: Throwable) {
-		toreturn.deleteRecursively()
+		tmpdir.deleteRecursively()
 		throw t
 	}
 }
