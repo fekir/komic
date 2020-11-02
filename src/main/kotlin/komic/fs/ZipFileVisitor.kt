@@ -43,8 +43,7 @@ class ZipFileVisitor(private val zout: ZipOutputStream, private val rootdir: Pat
 
 // unused, just for testing
 fun unzip(cbz: File) {
-
-	val directory = File(cbz.parent, cbz.name.substring(0, cbz.name.lastIndexOf(".")))
+	val directory = File(cbz.parent, cbz.nameWithoutExtension)
 	if (directory.exists()) { // FIXME: check empty and check if we need to use internal directory
 		throw ComicException("directory " + directory.absolutePath + " already exists")
 	}

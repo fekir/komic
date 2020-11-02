@@ -32,8 +32,9 @@ enum class recursive {
 }
 
 fun enumerate_prefix_images(folder: File, prefix: String) {
-	val fileList = folder.listFiles()
-			.filter { it.isDirectory || is_image_file_name(it.name) }
+	val fileList = folder.listFiles { file ->
+		file.isDirectory || is_image_file_name(file.name) }.orEmpty().toList()
+
 	Collections.sort(fileList, FileNameLengthComparator)
 	for (file in fileList) {
 		if (file.isDirectory) {
@@ -46,8 +47,8 @@ fun enumerate_prefix_images(folder: File, prefix: String) {
 fun enumerate_images(folder: File, begin: Int = 1, rec_enum: recursive = recursive.yes): Int {
 	enumerate_prefix_images(folder, "ren")
 
-	val fileList = folder.listFiles()
-			.filter { it.isDirectory || is_image_file_name(it.name) }
+	val fileList = folder.listFiles { file ->
+		file.isDirectory || is_image_file_name(file.name) }.orEmpty().toList()
 
 	Collections.sort(fileList, WindowsExplorerFileComparator)
 
@@ -60,9 +61,7 @@ fun enumerate_images(folder: File, begin: Int = 1, rec_enum: recursive = recursi
 				enumerate_images(file, 1, recursive.no)
 			}
 		} else {
-			val i = file.name.lastIndexOf('.')
-			assert(i > 0)
-			val extension = file.name.substring(i + 1).toLowerCase()
+			val extension = file.extension.toLowerCase(Locale.ROOT)
 			// FIXME: add function for detecting image type
 			file.renameTo(File(folder, String.format("%03d.$extension", index)))
 			index++
