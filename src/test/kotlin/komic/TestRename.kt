@@ -2,6 +2,7 @@ package komic
 
 import komic.fs.AutoDeleteFile
 import komic.fs.WindowsExplorerFileComparator
+import komic.fs.create_tmp_dir
 import org.junit.Test
 import java.io.File
 import java.nio.file.Files
@@ -72,8 +73,6 @@ internal class TestRename {
 
 	@Test
 	fun test_windows_comparator() {
-
-
 		//adaptor for comparing files
 		//Collections.sort(filenames, WindowsExplorerFileComparator)
 		val filenames2 = filenames.map { File(it) }
@@ -100,17 +99,13 @@ internal class TestRename {
 
 	@Test
 	fun test_enumerate() {
-		val tmpdir = Files.createTempDirectory("to_enum_")
+		val filenames = listOf("001", "002a", "002b", "003", "004").map { "$it.jpg" }
+		val tmpdir = create_tmp_dir(listOf(), filenames)
 		AutoDeleteFile(tmpdir).use {
-			val filenames = arrayListOf("001", "002a", "002b", "003", "004")
-			for (i in 0 until filenames.size) {
-				File(it.file, filenames[i] + ".jpg").createNewFile()
-			}
-
-			val index = enumerate_images(it.file)
+			val index = enumerate_images(tmpdir)
 			assertEquals(filenames.size, index - 1)
 
-			val fileList = it.file.listFiles().orEmpty()
+			val fileList = tmpdir.listFiles().orEmpty()
 			fileList.sort()
 
 			for (i in fileList.indices) {
@@ -121,17 +116,17 @@ internal class TestRename {
 
 	@Test
 	fun test_prefix_enumerate() {
-		val tmpdir = Files.createTempDirectory("to_prefix_")
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use {
 			val prefix = "pre"
 			val fileNames = arrayListOf(prefix, prefix + prefix)
 			fileNames.sort()
 			for (i in fileNames.indices) {
-				File(it.file, fileNames[i] + ".jpg").createNewFile()
+				File(tmpdir, fileNames[i] + ".jpg").createNewFile()
 			}
 
-			enumerate_prefix_images(it.file, prefix)
-			val fileList = it.file.listFiles().orEmpty()
+			enumerate_prefix_images(tmpdir, prefix)
+			val fileList = tmpdir.listFiles().orEmpty()
 			assertEquals(fileNames.size, fileList.size)
 			fileList.sort()
 			for (i in fileList.indices) {

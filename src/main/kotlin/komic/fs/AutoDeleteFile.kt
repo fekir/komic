@@ -4,7 +4,7 @@ import java.io.Closeable
 import java.io.File
 import java.nio.file.Path
 
-class AutoDeleteFile(val file: File) : Closeable {
+class AutoDeleteFile(private val file: File) : Closeable {
 	private var detached = false
 
 	constructor(p: Path) : this(p.toFile())

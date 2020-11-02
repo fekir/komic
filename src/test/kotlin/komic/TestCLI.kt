@@ -52,8 +52,8 @@ internal class TestCLI {
 
 	@Test
 	fun cli_optimize_cbz(){
-		val tmpdir = create_tmp_dir()
-		AutoDeleteFile(tmpdir).use { _ ->
+		val tmpdir = createTempDir()
+		AutoDeleteFile(tmpdir).use {
 			//komic create --format cbz comic; rm -r comic; cp comic.cbz comic.cbz2; komic optimize comic.cbz
 			val comicdir = File(tmpdir, "comic")
 			File("data/comic").copyRecursively(comicdir)
@@ -68,8 +68,8 @@ internal class TestCLI {
 
 	@Test
 	fun cli_optimize_dir_jpg(){
-		val tmpdir = create_tmp_dir()
-		AutoDeleteFile(tmpdir).use { _ ->
+		val tmpdir = createTempDir()
+		AutoDeleteFile(tmpdir).use {
 			val image = File("data/comic/001.jpg")
 			val newimage = File(tmpdir, "001.jpg")
 			image.copyTo(File(tmpdir, "001.jpg"))
@@ -82,8 +82,8 @@ internal class TestCLI {
 	}
 	@Test
 	fun cli_optimize_file_jpg(){
-		val tmpdir = create_tmp_dir()
-		AutoDeleteFile(tmpdir).use { _ ->
+		val tmpdir = createTempDir()
+		AutoDeleteFile(tmpdir).use {
 			val image = File("data/comic/001.jpg")
 			val newimage = File(tmpdir, "001.jpg")
 			image.copyTo(File(tmpdir, "001.jpg"))
@@ -97,7 +97,7 @@ internal class TestCLI {
 
 	@Test
 	fun cli_extract() {
-		val tmpdir = create_tmp_dir()
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use { _ ->
 			val archive = File(tmpdir, "data/test.7z")
 			File("data/test.7z").copyTo(archive)
@@ -112,7 +112,7 @@ internal class TestCLI {
 
 	@Test
 	fun cli_enumerate(){
-		val tmpdir = create_tmp_dir()
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use { _ ->
 			val filenames2 = filenames.map { val f = File(tmpdir, it); f.createNewFile(); f.canonicalPath}
 			main("enumerate", "--recursive=no", tmpdir.toString())
@@ -131,7 +131,7 @@ internal class TestCLI {
 	@Test
 	fun cli_clean(){
 		// FIXME: add hidden file and check for warning
-		val tmpdir = create_tmp_dir()
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use { _ ->
 			File(tmpdir, ".picasa.ini").createNewFile()
 			File(tmpdir, "001.jpg").createNewFile()

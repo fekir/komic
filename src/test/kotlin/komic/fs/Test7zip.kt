@@ -18,7 +18,7 @@ internal class Test7zip {
 
 	@Test
 	fun `extract 7z`() {
-		val tmpdir = create_tmp_dir()
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use { _ ->
 			val tmpdir = File(tmpdir, "temp")
 			un7zip("data/test.7z", tmpdir)
@@ -31,7 +31,7 @@ internal class Test7zip {
 
 	@Test
 	fun `extract 7z with dirty dir`() {
-		val tmpdir = create_tmp_dir()
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use { _ ->
 			val tmpdir = File(tmpdir, "temp")
 			un7zip("data/test-with-dirty-dir.7z", tmpdir)
@@ -44,7 +44,7 @@ internal class Test7zip {
 
 	@Test
 	fun `extract rar`() {
-		val tmpdir = create_tmp_dir()
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use { _ ->
 			val tmpdir = File(tmpdir, "temp")
 			un7zip("data/test.rar", tmpdir)
@@ -58,10 +58,9 @@ internal class Test7zip {
 
 	@Test
 	fun `zip and un7zip`() {
-		val tmpdir = Files.createTempDirectory("zip_inducks_").toFile()
+		val tmpdir = create_tmp_dir(listOf("test"))
 		AutoDeleteFile(tmpdir).use {
 			val zipdir = File(tmpdir, "test")
-			zipdir.mkdir()
 
 			for (i in 0..9) {
 				PrintWriter(FileWriter(File(zipdir, "file.txt$i"), true), true).use { out ->
@@ -90,10 +89,9 @@ internal class Test7zip {
 
 	@Test
 	fun `zip and un7zip default`() {
-		val tmpdir = Files.createTempDirectory("zip_inducks_").toFile()
+		val tmpdir = create_tmp_dir(listOf("test"))
 		AutoDeleteFile(tmpdir).use {
 			val zipdir = File(tmpdir, "test")
-			zipdir.mkdir()
 
 			for (i in 0..9) {
 				PrintWriter(FileWriter(File(zipdir, "file.txt$i"), true), true).use { out ->

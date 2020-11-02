@@ -79,6 +79,5 @@ internal class TestRemoveDirtyFiles {
 			assertTrue(files.filter { it.isFile }.all { !isDirtyFile(it) })
 			assertTrue(files.filter { it.isDirectory  }.all { !isDirtyDirectory(it) })
 		}
-
 	}
 }

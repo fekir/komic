@@ -22,7 +22,7 @@ internal class TestZip {
 
 	@Test
 	fun `zip and unzip`() {
-		val tmpdir = Files.createTempDirectory("zip_inducks_").toFile()
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use {
 			val zipdir = File(tmpdir, "test")
 			zipdir.mkdir()
@@ -54,7 +54,7 @@ internal class TestZip {
 
 	@Test
 	fun test_zip_unzip_default() {
-		val tmpdir = Files.createTempDirectory("zip_inducks_").toFile()
+		val tmpdir = createTempDir()
 		AutoDeleteFile(tmpdir).use {
 			val zipdir = File(tmpdir, "test")
 			zipdir.mkdir()
@@ -86,10 +86,9 @@ internal class TestZip {
 
 	@Test
 	fun `cat inducks`() {
-		val tmpdir = Files.createTempDirectory("zip_inducks_").toFile()
+		val tmpdir = create_tmp_dir(listOf("test"), listOf())
 		AutoDeleteFile(tmpdir).use {
 			val zipdir = File(tmpdir, "test")
-			zipdir.mkdir()
 
 			val inducks_content = "[I TL 1483-A]  Paperinik divo del cinema\n" +
 					"[I TL 2328]    Giù la maschera - Paure nascoste \n" +
@@ -121,10 +120,10 @@ internal class TestZip {
 
 	@Test
 	fun `mimetype comes first and is not compressed`() {
-		val tmpdir = Files.createTempDirectory("first_mimetype").toFile()
+		val tmpdir = create_tmp_dir(listOf("epub"), listOf())
 		AutoDeleteFile(tmpdir).use {
 			val zipdir = File(tmpdir, "epub")
-			zipdir.mkdir()
+
 			val content = "application/epub+zip"
 			PrintWriter(FileWriter(File(zipdir, "mimetype"), true), true).use { out ->
 				out.println(content)
@@ -142,9 +141,7 @@ internal class TestZip {
 				if(!from_list.toList().containsAll(content.toList())){
 					fail("content not found: $from_list")
 				}
-
 			}
-
 		}
 	}
 

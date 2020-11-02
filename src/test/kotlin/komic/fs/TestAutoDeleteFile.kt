@@ -8,21 +8,21 @@ internal class TestAutoDeleteFile {
 
 	@Test
 	fun `delete dir on exit`() {
-		val tmpdir = Files.createTempDirectory("to_clean_")
-		AutoDeleteFile(tmpdir.toFile()).use {
+		val tmpdir = createTempDir()
+		AutoDeleteFile(tmpdir).use {
 			// do nothing
 		}
-		assertFalse(Files.exists(tmpdir))
+		assertFalse(tmpdir.exists())
 	}
 
 	@Test
 	fun `do not delete dir on exit`() {
-		val tmpdir = Files.createTempDirectory("to_clean_")
-		AutoDeleteFile(tmpdir.toFile()).use {
+		val tmpdir = createTempDir()
+		AutoDeleteFile(tmpdir).use {
 			it.detach()
 		}
-		assertTrue(Files.exists(tmpdir))
-		tmpdir.toFile().deleteRecursively()
+		assertTrue(tmpdir.exists())
+		tmpdir.deleteRecursively()
 	}
 
 }
