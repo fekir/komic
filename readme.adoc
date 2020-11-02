@@ -5,8 +5,9 @@ Command line program for handling comic archives (`.cbz`).
 In particular extracting, compressing, optimizing and reordering archives and images.
 
 == How to use/build
-Compile with: `gradle build`
-Run tests with: `gradle test`
+Compile with `gradle build`
+
+Run tests with `gradle test`
 
 Create script
 
@@ -17,3 +18,12 @@ java -jar path/to/komic.jar "$@";
 ----
 
 So that it can be used without typing `java` all the times.
+Create completion file
+
+[source, sh]
+----
+#!/bin/sh
+java -cp "path/to/komic.jar:/path/to/picocli.jar" picocli.AutoComplete komic.KomicCmd
+----
+
+and source the generated `komic_completion` file in `bash`/`zsh`.

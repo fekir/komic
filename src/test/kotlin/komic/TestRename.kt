@@ -8,77 +8,80 @@ import java.nio.file.Files
 import java.util.*
 import kotlin.test.assertEquals
 
+val filenames = listOf(
+		"Filename01.jpg",
+		"filename",
+		"filename0",
+		"filename 0",
+		"Filename1.jpg",
+		"Filename10.jpg",
+		"filename.jpg",
+		"filename2.jpg",
+		"filename03.jpg",
+		"filename3.jpg",
+		"filename00.jpg",
+		"filename0.jpg",
+		"filename0b.jpg",
+		"filename0b1.jpg",
+		"filename0b02.jpg",
+		"filename0c.jpg",
+		"filename00a.jpg",
+		"filename.txt",
+		"filename00a.txt",
+		"filename0a.txt",
+		"filename01.0hjh45-test.txt",
+		"filename01.0hjh46",
+		"filename2.hjh45.txt",
+		"filename01.1hjh45.txt",
+		"filename01.hjh45.txt",
+		"filename 01",
+		"filename 00"
+)
+
+val sortedfilename = listOf(
+		"filename",
+		"filename 00",
+		"filename 0",
+		"filename 01",
+		"filename.jpg",
+		"filename.txt",
+		"filename00.jpg",
+		"filename00a.jpg",
+		"filename00a.txt",
+		"filename0",
+		"filename0.jpg",
+		"filename0a.txt",
+		"filename0b.jpg",
+		"filename0b1.jpg",
+		"filename0b02.jpg",
+		"filename0c.jpg",
+		"filename01.0hjh45-test.txt",
+		"filename01.0hjh46",
+		"filename01.1hjh45.txt",
+		"filename01.hjh45.txt",
+		"Filename01.jpg",
+		"Filename1.jpg",
+		"filename2.hjh45.txt",
+		"filename2.jpg",
+		"filename03.jpg",
+		"filename3.jpg",
+		"Filename10.jpg"
+)
 
 internal class TestRename {
 
 	@Test
 	fun test_windows_comparator() {
-		val filenames = arrayListOf(
-				File("Filename01.jpg"),
-				File("filename"),
-				File("filename0"),
-				File("filename 0"),
-				File("Filename1.jpg"),
-				File("Filename10.jpg"),
-				File("filename.jpg"),
-				File("filename2.jpg"),
-				File("filename03.jpg"),
-				File("filename3.jpg"),
-				File("filename00.jpg"),
-				File("filename0.jpg"),
-				File("filename0b.jpg"),
-				File("filename0b1.jpg"),
-				File("filename0b02.jpg"),
-				File("filename0c.jpg"),
-				File("filename00a.jpg"),
-				File("filename.txt"),
-				File("filename00a.txt"),
-				File("filename0a.txt"),
-				File("filename01.0hjh45-test.txt"),
-				File("filename01.0hjh46"),
-				File("filename2.hjh45.txt"),
-				File("filename01.1hjh45.txt"),
-				File("filename01.hjh45.txt"),
-				File("filename 01"),
-				File("filename 00")
-		)
+
 
 		//adaptor for comparing files
-		Collections.sort(filenames, WindowsExplorerFileComparator)
+		//Collections.sort(filenames, WindowsExplorerFileComparator)
+		val filenames2 = filenames.map { File(it) }
+		Collections.sort(filenames2, WindowsExplorerFileComparator)
 
-
-		val sortedfilename = arrayListOf(
-				File("filename"),
-				File("filename 00"),
-				File("filename 0"),
-				File("filename 01"),
-				File("filename.jpg"),
-				File("filename.txt"),
-				File("filename00.jpg"),
-				File("filename00a.jpg"),
-				File("filename00a.txt"),
-				File("filename0"),
-				File("filename0.jpg"),
-				File("filename0a.txt"),
-				File("filename0b.jpg"),
-				File("filename0b1.jpg"),
-				File("filename0b02.jpg"),
-				File("filename0c.jpg"),
-				File("filename01.0hjh45-test.txt"),
-				File("filename01.0hjh46"),
-				File("filename01.1hjh45.txt"),
-				File("filename01.hjh45.txt"),
-				File("Filename01.jpg"),
-				File("Filename1.jpg"),
-				File("filename2.hjh45.txt"),
-				File("filename2.jpg"),
-				File("filename03.jpg"),
-				File("filename3.jpg"),
-				File("Filename10.jpg")
-		)
-		assertEquals(filenames.size, sortedfilename.size)
-		for (i in 0 until filenames.size) {
-			assertEquals(sortedfilename[i].name, filenames[i].name)
+		assertEquals(filenames2.size, sortedfilename.size)
+		for (i in filenames2.indices) {
+			assertEquals(sortedfilename[i], filenames2[i].name)
 		}
 	}
 

@@ -20,13 +20,13 @@ repositories {
 }
 
 dependencies {
+	compile 'info.picocli:picocli:4.5.2'
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	compile "org.jsoup:jsoup:1.13.1"
 	ext.sevenzip_version = '16.02-2.01'
 	compile group: 'net.sf.sevenzipjbinding', name: 'sevenzipjbinding-all-platforms', version: "$sevenzip_version"
 	compile group: 'net.sf.sevenzipjbinding', name: 'sevenzipjbinding', version: "$sevenzip_version"
 	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-
 }
 
 jar {
