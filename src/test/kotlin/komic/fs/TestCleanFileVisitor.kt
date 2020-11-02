@@ -30,28 +30,6 @@ fun create_tmp_dir(listdirs: List<String> = emptyList(), listfiles: List<String>
 	}
 }
 
-class ListFilesAndDirs : SimpleFileVisitor<Path>() {
-	val listed_files: MutableList<File> = mutableListOf()
-	val listed_dirs: MutableList<File> = mutableListOf()
-
-	override fun visitFile(path: Path, attr: BasicFileAttributes): FileVisitResult {
-		assert(!attr.isDirectory)
-		if (attr.isRegularFile) {
-			listed_files.add(path.toFile())
-		}
-		return FileVisitResult.CONTINUE
-	}
-
-	override fun postVisitDirectory(dir: Path, exc: IOException?): FileVisitResult {
-		val file = dir.toFile()
-		assert(!file.isFile)
-		if (file.isDirectory) {
-			listed_dirs.add(file)
-		}
-		return FileVisitResult.CONTINUE
-	}
-}
-
 internal class TestRemoveDirtyFiles {
 	@Test
 	fun `test create_tmp_dir`() {
@@ -59,10 +37,9 @@ internal class TestRemoveDirtyFiles {
 		val listfiles = listOf("a/b/c/f.txt", "f.txt", "a/f.txt")
 		val tmpdir = create_tmp_dir(listdirs, listfiles)
 		AutoDeleteFile(tmpdir).use { _ ->
-			val visitor = ListFilesAndDirs();
-			Files.walkFileTree(tmpdir.toPath(), visitor)
-			assertTrue(visitor.listed_dirs.map { it.path.removePrefix(tmpdir.path + "/") }.containsAll(listdirs));
-			assertTrue(visitor.listed_files.map { it.path.removePrefix(tmpdir.path + "/") }.containsAll(listfiles))
+			val filesanddirs = tmpdir.walk()
+			assertTrue(filesanddirs.filter { it.isDirectory  }.map { it.path.removePrefix(tmpdir.path + "/") }.toList().containsAll(listdirs))
+			assertTrue(filesanddirs.filter { it.isFile  }.map { it.path.removePrefix(tmpdir.path + "/") }.toList().containsAll(listfiles))
 		}
 	}
 
@@ -99,11 +76,9 @@ internal class TestRemoveDirtyFiles {
 			val warns = clean(tmpdir)
 			assertFalse(warns.isEmpty())
 
-			val list_files = ListFilesAndDirs();
-			Files.walkFileTree(tmpdir.toPath(), list_files)
-
-			assertTrue(list_files.listed_files.all { !isDirtyFile(it) });
-			assertTrue(list_files.listed_dirs.all { !isDirtyDirectory(it) });
+			val files = tmpdir.walk()
+			assertTrue(files.filter { it.isFile }.all { !isDirtyFile(it) })
+			assertTrue(files.filter { it.isDirectory  }.all { !isDirtyDirectory(it) })
 		}
 
 	}

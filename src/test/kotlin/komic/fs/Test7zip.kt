@@ -22,10 +22,9 @@ internal class Test7z {
 		AutoDeleteFile(tmpdir).use { _ ->
 			un7zip("data/test.7z", tmpdir)
 
-			val visitor = ListFilesAndDirs();
-			Files.walkFileTree(tmpdir.toPath(), visitor)
-			assertEquals(2, visitor.listed_files.size);
-			assertTrue(visitor.listed_files.map { it.path.removePrefix(tmpdir.path + "/") }.containsAll(listOf("test/file.txt", "test/file2.txt")));
+			val files = tmpdir.walk().filter { it.isFile }.toList()
+			assertEquals(2, files.size)
+			assertTrue(files.map { it.path.removePrefix(tmpdir.path + "/") }.containsAll(listOf("test/file.txt", "test/file2.txt")))
 		}
 	}
 
@@ -35,10 +34,9 @@ internal class Test7z {
 		AutoDeleteFile(tmpdir).use { _ ->
 			un7zip("data/test-with-dirty-dir.7z", tmpdir)
 
-			val visitor = ListFilesAndDirs();
-			Files.walkFileTree(tmpdir.toPath(), visitor)
-			assertEquals(2, visitor.listed_files.size);
-			assertTrue(visitor.listed_files.map { it.path.removePrefix(tmpdir.path + "/") }.containsAll(listOf("test/file.txt", "test/file2.txt")));
+			val files = tmpdir.walk().filter { it.isFile }.toList()
+			assertEquals(2, files.size)
+			assertTrue(files.map { it.path.removePrefix(tmpdir.path + "/") }.containsAll(listOf("test/file.txt", "test/file2.txt")))
 		}
 	}
 
@@ -48,10 +46,9 @@ internal class Test7z {
 		AutoDeleteFile(tmpdir).use { _ ->
 			un7zip("data/test.rar", tmpdir)
 
-			val visitor = ListFilesAndDirs();
-			Files.walkFileTree(tmpdir.toPath(), visitor)
-			assertEquals(2, visitor.listed_files.size);
-			assertTrue(visitor.listed_files.map { it.path.removePrefix(tmpdir.path + "/") }.containsAll(listOf("test/file.txt", "test/file2.txt")));
+			val files = tmpdir.walk().filter { it.isFile }.toList()
+			assertEquals(2, files.size)
+			assertTrue(files.map { it.path.removePrefix(tmpdir.path + "/") }.containsAll(listOf("test/file.txt", "test/file2.txt")))
 		}
 	}
 
